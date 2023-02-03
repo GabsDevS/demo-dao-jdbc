@@ -6,8 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.mysql.cj.jdbc.exceptions.SQLError;
-
 import db.DB;
 import db.DbException;
 import model.dao.SellerDao;
@@ -57,18 +55,9 @@ public class SellerDaoJDBC implements SellerDao {
 			
 			if (rs.next()) {
 				
-				Department dept = new Department();
-				dept.setId(rs.getInt(rs.getInt("DepartmentId")));
-				dept.setName(rs.getString("DepName"));
+				Department dept = instantiateDepartment(rs);
 				
-				Seller obj = new Seller();
-				
-				obj.setId(rs.getInt("Id"));
-				obj.setName(rs.getString("Name"));
-				obj.setEmail(rs.getString("Email"));
-				obj.setBaseSalary(rs.getDouble("BaseSalary"));
-				obj.setBirthDate(rs.getDate("BirthDate"));
-				obj.setDepartment(dept);
+				Seller obj = instantiateSeller(rs, dept);
 				
 				return obj;
 			}
@@ -88,6 +77,26 @@ public class SellerDaoJDBC implements SellerDao {
 	public List<Seller> findAll() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public Department instantiateDepartment(ResultSet rs) throws SQLException {
+		Department dept = new Department();
+		dept.setId(rs.getInt(rs.getInt("DepartmentId")));
+		dept.setName(rs.getString("DepName"));
+		return dept;
+	}
+	
+	public Seller instantiateSeller(ResultSet rs, Department dept) throws SQLException {
+		
+		Seller obj = new Seller();
+		obj.setId(rs.getInt("Id"));
+		obj.setName(rs.getString("Name"));
+		obj.setEmail(rs.getString("Email"));
+		obj.setBaseSalary(rs.getDouble("BaseSalary"));
+		obj.setBirthDate(rs.getDate("BirthDate"));
+		obj.setDepartment(dept);
+		
+		return obj;
 	}
 
 }
