@@ -10,19 +10,19 @@ import java.sql.Statement;
 import java.util.Properties;
 
 public class DB {
-	
+
 	private static Connection conn = null;
 	
 	public static Connection getConnection() {
-		try {
-			if (conn == null) {
+		if (conn == null) {
+			try {
 				Properties props = loadProperties();
 				String url = props.getProperty("dburl");
 				conn = DriverManager.getConnection(url, props);
 			}
-		}
-		catch (SQLException e) {
-			throw new DbException(e.getMessage());
+			catch (SQLException e) {
+				throw new DbException(e.getMessage());
+			}
 		}
 		return conn;
 	}
@@ -31,8 +31,7 @@ public class DB {
 		if (conn != null) {
 			try {
 				conn.close();
-			}
-			catch (SQLException e) {
+			} catch (SQLException e) {
 				throw new DbException(e.getMessage());
 			}
 		}
@@ -58,7 +57,7 @@ public class DB {
 			}
 		}
 	}
-	
+
 	public static void closeResultSet(ResultSet rs) {
 		if (rs != null) {
 			try {
@@ -68,5 +67,4 @@ public class DB {
 			}
 		}
 	}
-
 }
